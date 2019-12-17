@@ -50,8 +50,7 @@ public class RandomTeleport implements CommandExecutor {
                             if (!block) {
                                 break;
                             }
-                        }
-                        else {
+                        } else {
                             break;
                         }
                     }
@@ -83,8 +82,7 @@ public class RandomTeleport implements CommandExecutor {
                     
                     player.sendMessage(message);
                 }
-            }
-            else {
+            } else {
                 String message = main.getConfig().getString("messages.wrongsyntax");
                 message = StringUtils.replace(message,"%player%", player.getDisplayName());
                 message = StringUtils.replace(message,"&", "§");
