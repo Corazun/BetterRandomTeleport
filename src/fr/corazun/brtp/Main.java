@@ -12,7 +12,6 @@ public class Main extends JavaPlugin {
         getLogger().info("BetterRandomTeleport is now enabled !");
         this.saveDefaultConfig();
         getCommand("randomteleport").setExecutor(new RandomTeleport(this));
-        getCommand("rtp").setExecutor(new RandomTeleport(this));
     }
 
     @Override

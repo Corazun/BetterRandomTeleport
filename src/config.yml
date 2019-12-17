@@ -12,9 +12,12 @@ coord:
 safe-tp: true
 #################################################
 messages:
-  # Available placeholders :  %CoordX%, %CoordY%, %CoordZ%
+  # Available placeholder(s) :  %CoordX%, %CoordY%, %CoordZ%
   # Send a message after the player was randomly teleported
-  success: "&aYou were succesfuly randomly teleported to &2X : %CoordX%&a, &2Y : %CoordY%&a, &2Z : %CoordZ%"
-  # Available placeholders : %hours%, %minutes%, %seconds%
+  successtp: "&aYou were succesfuly randomly teleported to &2X : %CoordX%&a, &2Y : %CoordY%&a, &2Z : %CoordZ%"
+  # Available placeholder(s) : %hours%, %minutes%, %seconds%
   # Send a message when the player is still in cooldown
-  error: "&cRetry in &4%hours% &chour(s), &4%minutes% &cminute(s), &4%seconds% &cseconde(s)"
+  oncooldown: "&cRetry in &4%hours% &chour(s), &4%minutes% &cminute(s), &4%seconds% &cseconde(s)"
+  # Available placeholder(s) : %player%
+  # Send a message when the command is misspelled
+  wrongsyntax: "&c%player% you should try /randomteleport"

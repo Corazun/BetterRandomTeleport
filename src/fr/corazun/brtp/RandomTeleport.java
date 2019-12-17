@@ -20,9 +20,10 @@ public class RandomTeleport implements CommandExecutor {
     private HashMap<UUID, Long> sessions = new HashMap<>();
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String message, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player) {
             Player player = (Player) sender;
+
             if(args.length == 0) {
                 int cooldown = main.getConfig().getInt("cooldown");
                 UUID uuid = player.getUniqueId();
@@ -44,9 +45,8 @@ public class RandomTeleport implements CommandExecutor {
                         randomlocation.setY(y);
 
                         if(main.getConfig().getBoolean("safe-tp", true)) {
-                            boolean block;
-                            block = randomlocation.getBlock().getRelative(BlockFace.DOWN).isLiquid();
-
+                            boolean block = randomlocation.getBlock().getRelative(BlockFace.DOWN).isLiquid();
+                            
                             if (!block) {
                                 break;
                             }
@@ -56,15 +56,15 @@ public class RandomTeleport implements CommandExecutor {
                         }
                     }
 
-                    String row = main.getConfig().getString("messages.success");
+                    String message = main.getConfig().getString("messages.successtp");
 
-                    row = StringUtils.replace(row, "%CoordX%", Integer.toString(x));
-                    row = StringUtils.replace(row,"%CoordY%", Integer.toString(y));
-                    row = StringUtils.replace(row,"%CoordZ%", Integer.toString(z));
-                    row = StringUtils.replace(row,"&", "§");
+                    message = StringUtils.replace(message, "%CoordX%", Integer.toString(x));
+                    message = StringUtils.replace(message,"%CoordY%", Integer.toString(y));
+                    message = StringUtils.replace(message,"%CoordZ%", Integer.toString(z));
+                    message= StringUtils.replace(message,"&", "§");
 
                     player.teleport(randomlocation);
-                    player.sendMessage(row);
+                    player.sendMessage(message);
 
                     Long timestamp = System.currentTimeMillis();
                     sessions.put(uuid, timestamp);
@@ -74,19 +74,23 @@ public class RandomTeleport implements CommandExecutor {
                     int minutes = ((timeleft - seconds) / 60);
                     int hours = ((timeleft - seconds) / 3600);
 
-                    String row = main.getConfig().getString("messages.error");
+                    String message = main.getConfig().getString("messages.oncooldown");
 
-                    row = StringUtils.replace(row,"%hours%", Integer.toString(hours));
-                    row = StringUtils.replace(row,"%minutes%", Integer.toString(minutes));
-                    row = StringUtils.replace(row,"%seconds%", Integer.toString(seconds));
-                    row = StringUtils.replace(row,"&", "§");
+                    message = StringUtils.replace(message,"%hours%", Integer.toString(hours));
+                    message = StringUtils.replace(message,"%minutes%", Integer.toString(minutes));
+                    message = StringUtils.replace(message,"%seconds%", Integer.toString(seconds));
+                    message = StringUtils.replace(message,"&", "§");
 
 
-                    player.sendMessage(row);
+                    player.sendMessage(message);
                 }
             }
             else {
-                player.sendMessage("§cUtilisation : /randomteleport");
+                String message = main.getConfig().getString("messages.wrongsyntax");
+                message = StringUtils.replace(message,"%player%", player.getDisplayName());
+                message = StringUtils.replace(message,"&", "§");
+
+                player.sendMessage(message);
             }
         }
         return false;
