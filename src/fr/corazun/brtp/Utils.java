@@ -13,8 +13,6 @@ class Utils {
 
         } while (coordonate <= minimalradius && coordonate >= (minimalradius * -1));
 
-
-
         return coordonate;
     }
 }
