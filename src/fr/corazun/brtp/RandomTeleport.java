@@ -80,8 +80,7 @@ public class RandomTeleport implements CommandExecutor {
                     message = StringUtils.replace(message,"%minutes%", Integer.toString(minutes));
                     message = StringUtils.replace(message,"%seconds%", Integer.toString(seconds));
                     message = StringUtils.replace(message,"&", "§");
-
-
+                    
                     player.sendMessage(message);
                 }
             }
