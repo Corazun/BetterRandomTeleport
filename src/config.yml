@@ -7,7 +7,7 @@ cooldown: 3600
 min: 300
 # Ignored worlds(s) for the Min-Size radius
 # ignored-worlds: []
-ignored-worlds: [ "world_nether"]
+ignored-worlds: [ "world_nether" ]
 # Max-size teleportation circle
 coord:
   x: 3500
