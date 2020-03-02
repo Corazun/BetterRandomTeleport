@@ -12,10 +12,17 @@ import java.util.*;
 
 public class RandomTeleport implements CommandExecutor {
 
-    private Main main;
+    private static Main main;
     RandomTeleport(Main plugin) {
         this.main = plugin;
     }
+
+    int x;
+    int y;
+    int z;
+
+    int countFlag;
+    int maxtry = 15;
 
     private HashMap<UUID, Long> sessions = new HashMap<>();
 
@@ -25,48 +32,87 @@ public class RandomTeleport implements CommandExecutor {
             Player player = (Player) sender;
 
             if(args.length == 0) {
+                if (!player.hasPermission("brtp.everywhere") && main.getConfig().getStringList("disabled-worlds").contains(player.getWorld().getName())) {
+                    String message = main.getConfig().getString("messages.disabledworld");
+
+                    message = StringUtils.replace(message,"%player%", player.getDisplayName());
+                    message = StringUtils.replace(message,"%world%", player.getWorld().getName());
+                    message= StringUtils.replace(message,"&", "§");
+
+                    player.sendMessage(message);
+                    return true;
+                }
+
                 int cooldown = main.getConfig().getInt("cooldown");
                 UUID uuid = player.getUniqueId();
 
                 if (!sessions.containsKey(uuid) || System.currentTimeMillis() - sessions.get(uuid) >= cooldown * 1000 || player.hasPermission("brtp.bypass")) {
                     int minimalradius = main.getConfig().getInt("min");
                     Location randomlocation;
-                    int x;
-                    int y;
-                    int z;
 
-                    while (true) {
-                        x = Utils.setRandom(minimalradius, main.getConfig().getInt("coord.x"));
+                    countFlag = 0;
+
+                    do {
                         y = 0;
-                        z = Utils.setRandom(minimalradius, main.getConfig().getInt("coord.z"));
+
+                        if(!main.getConfig().getStringList("ignored-worlds").contains(player.getWorld().getName())) {
+                            x = Utils.setRandom(minimalradius, main.getConfig().getInt("coord.x"));
+                            z = Utils.setRandom(minimalradius, main.getConfig().getInt("coord.z"));
+                        } else {
+                            Random random = new Random();
+                            x = random.nextInt(main.getConfig().getInt("coord.x")) - x / 2;
+                            z = random.nextInt(main.getConfig().getInt("coord.z")) - z / 2;
+                        }
 
                         randomlocation = new Location(player.getWorld(), x, y, z);
-                        y = randomlocation.getWorld().getHighestBlockYAt(randomlocation);
-                        randomlocation.setY(y);
 
-                        if(main.getConfig().getBoolean("safe-tp", true)) {
-                            boolean block = randomlocation.getBlock().getRelative(BlockFace.DOWN).isLiquid();
-                            
-                            if (!block) {
-                                break;
+                        if (player.getWorld().getName().endsWith("_nether")) {
+                            for (int i = 127; i > 1; i--) {
+                                y = i;
+                                if (randomlocation.getWorld().getBlockAt(x, y, z).isEmpty() && randomlocation.getWorld().getBlockAt(x, y, z).getRelative(BlockFace.UP).isEmpty() && !randomlocation.getWorld().getBlockAt(x, y, z).getRelative(BlockFace.DOWN).isEmpty()) {
+                                    break;
+                                }
                             }
                         } else {
-                            break;
+                            y = randomlocation.getWorld().getHighestBlockYAt(randomlocation);
                         }
+
+                        randomlocation.setY(y);
+
+                        if(countFlag > maxtry) break;
+                        countFlag++;
+
+                    } while (!Utils.isTeleportationSafe(randomlocation, main.getConfig().getBoolean("safe-tp", true)));
+
+                    if(countFlag <= maxtry) {
+                        String message = main.getConfig().getString("messages.successtp");
+
+                        message = StringUtils.replace(message, "%CoordX%", Integer.toString(x));
+                        message = StringUtils.replace(message, "%CoordY%", Integer.toString(y));
+                        message = StringUtils.replace(message, "%CoordZ%", Integer.toString(z));
+                        message = StringUtils.replace(message, "&", "§");
+
+                        player.teleport(randomlocation);
+                        player.sendMessage(message);
+
+                        Location finalRandomlocation = randomlocation;
+                        main.getServer().getScheduler().scheduleSyncDelayedTask(main, () -> {
+                            if (player.getLocation().getY() != y) {
+                                player.teleport(finalRandomlocation);
+                            }
+                        }, 10L);
+
+                        Long timestamp = System.currentTimeMillis();
+                        sessions.put(uuid, timestamp);
+                    } else {
+                        String message = main.getConfig().getString("messages.notsafe");
+
+                        message = StringUtils.replace(message,"%player%", player.getDisplayName());
+                        message = StringUtils.replace(message,"%world%", player.getWorld().getName());
+                        message= StringUtils.replace(message,"&", "§");
+
+                        player.sendMessage(message);
                     }
-
-                    String message = main.getConfig().getString("messages.successtp");
-
-                    message = StringUtils.replace(message, "%CoordX%", Integer.toString(x));
-                    message = StringUtils.replace(message,"%CoordY%", Integer.toString(y));
-                    message = StringUtils.replace(message,"%CoordZ%", Integer.toString(z));
-                    message= StringUtils.replace(message,"&", "§");
-
-                    player.teleport(randomlocation);
-                    player.sendMessage(message);
-
-                    Long timestamp = System.currentTimeMillis();
-                    sessions.put(uuid, timestamp);
                 } else {
                     int timeleft = (int) (cooldown - (System.currentTimeMillis() - sessions.get(uuid)) / 1000L);
                     int seconds = timeleft % 60;
@@ -79,17 +125,18 @@ public class RandomTeleport implements CommandExecutor {
                     message = StringUtils.replace(message,"%minutes%", Integer.toString(minutes));
                     message = StringUtils.replace(message,"%seconds%", Integer.toString(seconds));
                     message = StringUtils.replace(message,"&", "§");
-                    
+
                     player.sendMessage(message);
                 }
             } else {
                 String message = main.getConfig().getString("messages.wrongsyntax");
+
                 message = StringUtils.replace(message,"%player%", player.getDisplayName());
                 message = StringUtils.replace(message,"&", "§");
 
                 player.sendMessage(message);
             }
         }
-        return false;
+        return true;
     }
 }

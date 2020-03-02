@@ -18,4 +18,5 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         getLogger().info("BetterRandomTeleport is now disabled !");
     }
+
 }
