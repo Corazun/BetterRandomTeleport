@@ -1,37 +1,52 @@
+# BetterRandomTeleport Config file !
+
 # Cooldown bypass permission : brtp.bypass
 # Disabled world(s) bypass permission : brtp.everywhere
+
 ################################################
 # Teleportation cooldown (in seconds)
 cooldown: 3600
-# Min-size teleportation radius
-min: 300
+
+# Leave the x, y, z values at 0 to use the position of the world spawn
+# Anchor for the min/max size teleportation circle
+anchor:
+  x: 0
+  z: 0
+
+# Circle size teleportation radius
+min-circle: 300
+max-circle: 3500
+
 # Ignored worlds(s) for the Min-Size radius
 # ignored-worlds: []
 ignored-worlds: [ "world_nether" ]
-# Max-size teleportation circle
-coord:
-  x: 3500
-  z: 3500
+
 # Safe-tp will prevent players to be teleported in liquid
 safe-tp: true
+
 # Disable rtp in referenced world(s)
 # disabled-worlds: []
 disabled-worlds: [ "world_the_end", "corazun_test1" ]
+
 #################################################
 messages:
   # Available placeholder(s) :  %CoordX%, %CoordY%, %CoordZ%
   # Send a message after the player was randomly teleported
-  successtp: "&aYou were succesfuly randomly teleported to &2X : %CoordX%&a, &2Y : %CoordY%&a, &2Z : %CoordZ%"
+  successtp: "&aYou were successfully randomly teleported to &2X : %CoordX%&a, &2Y : %CoordY%&a, &2Z : %CoordZ%"
+
   # Available placeholder(s) : %hours%, %minutes%, %seconds%
   # Send a message when the player is still in cooldown
   oncooldown: "&cRetry in &4%hours% &chour(s), &4%minutes% &cminute(s), &4%seconds% &cseconde(s)"
+
   # Available placeholder(s) : %player%
   # Send a message when the command is misspelled
   wrongsyntax: "&c%player% you should try /randomteleport"
+
   # Available placeholder(s) : %player%, %world%
   # Send a message when the player try to rtp on a disabled world
   disabledworld: "&cRandom teleport is currently disabled on %world% !"
+
   # Available placeholder(s) : %player%, %world%
   # Send a message when the plugin doesn't found any available location (cause by void) to teleport the player
   # Be careful with the Min and Max-Size radius !
-  notsafe: "&cOops, your current world seems to haven't any safe place defined in configuration to teleport you"
+  notsafe: "&cOops, your current world seems to haven't any safe place defined in configuration (min/max size radius) to teleport you"
