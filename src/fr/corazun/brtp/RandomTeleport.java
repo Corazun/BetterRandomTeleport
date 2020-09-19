@@ -161,8 +161,6 @@ public class RandomTeleport implements CommandExecutor {
         return true;
     }
 
-
-
     private double drawRandomCoordonate(String world, int anchor) {
         Random random = new Random();
 
