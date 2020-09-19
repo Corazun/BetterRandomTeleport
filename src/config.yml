@@ -47,6 +47,6 @@ messages:
   disabledworld: "&cRandom teleport is currently disabled on %world% !"
 
   # Available placeholder(s) : %player%, %world%
-  # Send a message when the plugin doesn't found any available location (cause by void) to teleport the player
+  # Send a message when the plugin doesn't found any available location (caused by void) to teleport the player
   # Be careful with the Min and Max-Size radius !
   notsafe: "&cOops, your current world seems to haven't any safe place defined in configuration (min/max size radius) to teleport you"
