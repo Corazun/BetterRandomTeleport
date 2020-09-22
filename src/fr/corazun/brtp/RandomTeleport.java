@@ -112,7 +112,7 @@ public class RandomTeleport implements CommandExecutor {
         return true;
     }
 
-    private boolean canRandomTeleport(Player player) {
+    private static boolean canRandomTeleport(Player player) {
         int cooldown = main.getConfig().getInt("cooldown");
 
         if (player.hasPermission("brtp.everywhere") || !main.getConfig().getStringList("disabled-worlds").contains(player.getWorld().getName())) {
@@ -161,7 +161,7 @@ public class RandomTeleport implements CommandExecutor {
         return true;
     }
 
-    private double drawRandomCoordonate(String world, int anchor) {
+    private static double drawRandomCoordonate(String world, int anchor) {
         Random random = new Random();
 
         int minCircle = main.getConfig().getInt("min-circle");
