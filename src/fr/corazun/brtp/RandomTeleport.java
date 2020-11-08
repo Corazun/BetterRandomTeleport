@@ -33,81 +33,81 @@ public class RandomTeleport implements CommandExecutor {
                 anchorZ = player.getWorld().getSpawnLocation().getBlockZ();
             }
 
-            switch(args.length) {
-                case 0:
-                    if (canRandomTeleport(player)) {
-                        Location randomlocation;
+            if (args.length == 0) {
+                if (canRandomTeleport(player)) {
+                    Location randomlocation;
 
-                        for(int i = 0; ; i++) {
-                            x = drawRandomCoordonate(player.getWorld().getName(), anchorX);
-                            z = drawRandomCoordonate(player.getWorld().getName(), anchorZ);
+                    for (int i = 0; ; i++) {
+                        x = drawRandomCoordonate(player.getWorld().getName(), anchorX);
+                        z = drawRandomCoordonate(player.getWorld().getName(), anchorZ);
 
-                            randomlocation = new Location(player.getWorld(), x, 0, z);
+                        randomlocation = new Location(player.getWorld(), x, 0, z);
 
-                            if (player.getWorld().getName().endsWith("_nether")) {
-                                for (int j = 127; j > 1; j--) {
-                                    y = j;
-                                    if (randomlocation.getWorld().getBlockAt((int) x, (int) y, (int) z).isEmpty() &&
-                                            randomlocation.getWorld().getBlockAt((int) x, (int) y, (int) z).getRelative(BlockFace.UP).isEmpty() &&
-                                                !randomlocation.getWorld().getBlockAt((int) x, (int) y, (int) z).getRelative(BlockFace.DOWN).isEmpty()) {
-                                        break;
-                                    }
+                        if (player.getWorld().getName().endsWith("_nether")) {
+                            for (int j = 127; j > 1; j--) {
+                                y = j;
+                                if (randomlocation.getWorld().getBlockAt((int) x, (int) y, (int) z).isEmpty() &&
+                                        randomlocation.getWorld().getBlockAt((int) x, (int) y, (int) z).getRelative(BlockFace.UP).isEmpty() &&
+                                        !randomlocation.getWorld().getBlockAt((int) x, (int) y, (int) z).getRelative(BlockFace.DOWN).isEmpty()) {
+                                    break;
                                 }
-                            } else {
-                                y = randomlocation.getWorld().getHighestBlockYAt(randomlocation);
-
-                                if (Double.parseDouble(Bukkit.getBukkitVersion().split("\\.")[1]) >= 13) { y += 1; }
                             }
+                        } else {
+                            y = randomlocation.getWorld().getHighestBlockYAt(randomlocation);
 
-                            randomlocation.setY(y);
-
-                            if (i < 15) {
-                                if (isTeleportationSafe(randomlocation,  Config.get().getBoolean("safe-tp", true))) { break; }
-                            } else {
-                                String message = Config.get().getString("messages.notsafe");
-
-                                message = StringUtils.replace(message,"%player%", player.getDisplayName());
-                                message = StringUtils.replace(message,"%world%", player.getWorld().getName());
-                                message= StringUtils.replace(message,"&", "§");
-
-                                player.sendMessage(message);
-                                return true;
+                            if (Double.parseDouble(Bukkit.getBukkitVersion().split("\\.")[1]) >= 13) {
+                                y += 1;
                             }
-
                         }
 
-                        String message =  Config.get().getString("messages.successtp");
+                        randomlocation.setY(y);
 
-                        message = StringUtils.replace(message, "%CoordX%", Double.toString(x));
-                        message = StringUtils.replace(message, "%CoordY%", Double.toString(y));
-                        message = StringUtils.replace(message, "%CoordZ%", Double.toString(z));
-                        message = StringUtils.replace(message, "&", "§");
-
-                        player.teleport(randomlocation);
-                        player.sendMessage(message);
-
-                        Location finalRandomlocation = randomlocation;
-                        main.getServer().getScheduler().scheduleSyncDelayedTask(main, () -> {
-                            if (player.getLocation().getY() != y) {
-                                player.teleport(finalRandomlocation);
+                        if (i < 15) {
+                            if (isTeleportationSafe(randomlocation, Config.get().getBoolean("safe-tp", true))) {
+                                break;
                             }
-                        }, 15L);
+                        } else {
+                            String message = Config.get().getString("messages.notsafe");
 
-                        Long timestamp = System.currentTimeMillis();
-                        UUID uuid = player.getUniqueId();
+                            message = StringUtils.replace(message, "%player%", player.getDisplayName());
+                            message = StringUtils.replace(message, "%world%", player.getWorld().getName());
+                            message = StringUtils.replace(message, "&", "§");
 
-                        sessions.put(uuid, timestamp);
+                            player.sendMessage(message);
+                            return true;
+                        }
+
                     }
-                    break;
 
-                default:
-                    String message = Config.get().getString("messages.wrongsyntax");
+                    String message = Config.get().getString("messages.successtp");
 
-                    message = StringUtils.replace(message,"%player%", player.getDisplayName());
-                    message = StringUtils.replace(message,"&", "§");
+                    message = StringUtils.replace(message, "%CoordX%", Double.toString(x));
+                    message = StringUtils.replace(message, "%CoordY%", Double.toString(y));
+                    message = StringUtils.replace(message, "%CoordZ%", Double.toString(z));
+                    message = StringUtils.replace(message, "&", "§");
 
+                    player.teleport(randomlocation);
                     player.sendMessage(message);
-                    break;
+
+                    Location finalRandomlocation = randomlocation;
+                    main.getServer().getScheduler().scheduleSyncDelayedTask(main, () -> {
+                        if (player.getLocation().getY() != y) {
+                            player.teleport(finalRandomlocation);
+                        }
+                    }, 15L);
+
+                    Long timestamp = System.currentTimeMillis();
+                    UUID uuid = player.getUniqueId();
+
+                    sessions.put(uuid, timestamp);
+                }
+            } else {
+                String message = Config.get().getString("messages.wrongsyntax");
+
+                message = StringUtils.replace(message, "%player%", player.getDisplayName());
+                message = StringUtils.replace(message, "&", "§");
+
+                player.sendMessage(message);
             }
 
         }
@@ -160,7 +160,7 @@ public class RandomTeleport implements CommandExecutor {
         return true;
     }
 
-    private double drawRandomCoordonate(String world, int anchor) {
+    private static double drawRandomCoordonate(String world, int anchor) {
 
         Random random = new Random();
 
