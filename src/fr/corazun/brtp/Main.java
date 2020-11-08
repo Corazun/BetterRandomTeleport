@@ -14,7 +14,6 @@ public class Main extends JavaPlugin {
         getCommand("randomteleport").setExecutor(new RandomTeleport(this));
         getCommand("betterrandomteleport").setExecutor(new BetterRandomTeleport());
         getCommand("betterrandomteleport").setTabCompleter(new TabCompleter());
-
     }
 
     @Override
