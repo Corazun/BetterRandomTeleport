@@ -24,6 +24,6 @@ public class Config {
     }
 
     public static Integer count() {
-        return get().getKeys(false).toArray().length;
+        return get().getKeys(true).toArray().length;
     }
 }
