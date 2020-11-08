@@ -21,11 +21,12 @@ public class RandomTeleport implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
         if(sender instanceof Player) {
             Player player = (Player) sender;
 
-            int anchorX = main.getConfig().getInt("anchor.x");
-            int anchorZ = main.getConfig().getInt("anchor.z");
+            int anchorX = Config.get().getInt("anchor.x");
+            int anchorZ = Config.get().getInt("anchor.z");
 
             if (anchorX == 0 || anchorZ == 0) {
                 anchorX = player.getWorld().getSpawnLocation().getBlockX();
@@ -61,9 +62,9 @@ public class RandomTeleport implements CommandExecutor {
                             randomlocation.setY(y);
 
                             if (i < 15) {
-                                if (isTeleportationSafe(randomlocation, main.getConfig().getBoolean("safe-tp", true))) { break; }
+                                if (isTeleportationSafe(randomlocation,  Config.get().getBoolean("safe-tp", true))) { break; }
                             } else {
-                                String message = main.getConfig().getString("messages.notsafe");
+                                String message = Config.get().getString("messages.notsafe");
 
                                 message = StringUtils.replace(message,"%player%", player.getDisplayName());
                                 message = StringUtils.replace(message,"%world%", player.getWorld().getName());
@@ -75,7 +76,7 @@ public class RandomTeleport implements CommandExecutor {
 
                         }
 
-                        String message = main.getConfig().getString("messages.successtp");
+                        String message =  Config.get().getString("messages.successtp");
 
                         message = StringUtils.replace(message, "%CoordX%", Double.toString(x));
                         message = StringUtils.replace(message, "%CoordY%", Double.toString(y));
@@ -98,8 +99,9 @@ public class RandomTeleport implements CommandExecutor {
                         sessions.put(uuid, timestamp);
                     }
                     break;
+
                 default:
-                    String message = main.getConfig().getString("messages.wrongsyntax");
+                    String message = Config.get().getString("messages.wrongsyntax");
 
                     message = StringUtils.replace(message,"%player%", player.getDisplayName());
                     message = StringUtils.replace(message,"&", "§");
@@ -112,10 +114,11 @@ public class RandomTeleport implements CommandExecutor {
         return true;
     }
 
-    private static boolean canRandomTeleport(Player player) {
-        int cooldown = main.getConfig().getInt("cooldown");
+    private boolean canRandomTeleport(Player player) {
 
-        if (player.hasPermission("brtp.everywhere") || !main.getConfig().getStringList("disabled-worlds").contains(player.getWorld().getName())) {
+        int cooldown = Config.get().getInt("cooldown");
+
+        if (player.hasPermission("brtp.everywhere") || !Config.get().getStringList("disabled-worlds").contains(player.getWorld().getName())) {
             UUID uuid = player.getUniqueId();
 
             if (!sessions.containsKey(uuid) || System.currentTimeMillis() - sessions.get(uuid) >= cooldown * 1000 || player.hasPermission("brtp.bypass")) {
@@ -127,7 +130,7 @@ public class RandomTeleport implements CommandExecutor {
                 int minutes = ((timeleft - seconds) / 60);
                 int hours = ((timeleft - seconds) / 3600);
 
-                String message = main.getConfig().getString("messages.oncooldown");
+                String message = Config.get().getString("messages.oncooldown");
 
                 message = StringUtils.replace(message,"%hours%", Integer.toString(hours));
                 message = StringUtils.replace(message,"%minutes%", Integer.toString(minutes));
@@ -137,7 +140,7 @@ public class RandomTeleport implements CommandExecutor {
                 player.sendMessage(message);
             }
         } else {
-            String message = main.getConfig().getString("messages.disabledworld");
+            String message = Config.get().getString("messages.disabledworld");
 
             message = StringUtils.replace(message, "%player%", player.getDisplayName());
             message = StringUtils.replace(message, "%world%", player.getWorld().getName());
@@ -150,27 +153,24 @@ public class RandomTeleport implements CommandExecutor {
     }
 
     private static boolean isTeleportationSafe(Location location, Boolean isSafeTpActivated ) {
-        if(!location.getBlock().getRelative(BlockFace.UP).isEmpty()) return false;
 
-        if(location.getBlock().getRelative(BlockFace.DOWN).isEmpty()) return false;
-
-        if(isSafeTpActivated) {
-            return !location.getBlock().getRelative(BlockFace.DOWN).isLiquid();
-        }
+        if(!location.getBlock().getRelative(BlockFace.UP).isEmpty() && location.getBlock().getRelative(BlockFace.DOWN).isEmpty()) return false;
+        if(isSafeTpActivated) return !location.getBlock().getRelative(BlockFace.DOWN).isLiquid();
 
         return true;
     }
 
-    private static double drawRandomCoordonate(String world, int anchor) {
+    private double drawRandomCoordonate(String world, int anchor) {
+
         Random random = new Random();
 
-        int minCircle = main.getConfig().getInt("min-circle");
-        int maxCircle = main.getConfig().getInt("max-circle");
+        int minCircle = Config.get().getInt("min-circle");
+        int maxCircle = Config.get().getInt("max-circle");
         double coordonate;
 
         do {
             coordonate = random.nextInt((anchor + maxCircle) - (anchor - maxCircle)) + (anchor - maxCircle);
-            if (main.getConfig().getStringList("ignored-worlds").contains(world)) { break; }
+            if (Config.get().getStringList("ignored-worlds").contains(world)) { break; }
         } while (!(coordonate > (anchor + minCircle)) && !(coordonate < (anchor - minCircle)));
 
         return coordonate + 0.5;
