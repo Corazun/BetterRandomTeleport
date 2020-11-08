@@ -50,6 +50,7 @@ messages:
   # Send a message when the plugin doesn't found any available location (caused by void) to teleport the player
   # Be careful with the Min and Max-Size radius !
   notsafe: "&cOops, your current world seems to haven't any safe place defined in configuration (min/max size radius) to teleport you"
-
+  
+  # Messages related to /brtp command and it subcommands
   reload: "&cSuccessfully reloaded %number% configuration keys !"
   unknown: "&cUnknown subcommand for /brtp :/"
