@@ -7,7 +7,7 @@
 # Teleportation cooldown (in seconds)
 cooldown: 3600
 
-# Leave the x, y, z values at 0 to use the position of the world spawn
+# Leave the x, z values at 0 to use the position of the world spawn
 # Anchor for the min/max size teleportation circle
 anchor:
   x: 0
