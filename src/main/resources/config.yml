@@ -1,0 +1,37 @@
+#
+# All delays are in seconds, use "&" placeholder for vanilla colors
+# BetterRandomTeleport config file
+
+# By default everyone owns the 'default' permission
+# Default permission will be used in case not custom one is applied
+# Permission(s) will be referenced as 'brtp.cooldown.VALUE' in server
+cooldown:
+  default: 3600
+  vip: 1000
+
+# Anchor from where the random teleport coordonates will be drawn per world
+# Keep the world's brackets empty to use the default world spawn location
+anchor:
+  world: {}
+  world_nether: {}
+  world_the_end: {x: 0, z: 0}
+
+# Minimum and maximum values of the teleport coordonates per world
+# Increasing the spread parameter will allow the teleport coordonates to be picked outside/near the given radius values
+# Don't pick a spread value higher than 10~20 to avoid the teleport coordonates to be broken !
+radius:
+  world: {min: 1000, max: 8000, spread: 0}
+  world_nether: {min: 125, max: 1000, spread: 0}
+  world_the_end: {min: 1200, max: 1900, spread: 0}
+
+# Players must have permission to be able to random teleport in given world(s)
+# Permission(s) will be referenced as 'brtp.access.WORLD' in server
+need-permission-worlds: [ "exemple_world", "world_nether" ]
+
+# Please consider disabling end dimension for versions below 1.9 unless you understand what you're doing
+# If enabled, end dimension requires specific radius, by default the values are configured for 1.9+ servers
+enable-in-end: false
+
+# Max random location retries allowed before cancelling the request for location not being safe
+# Avoid large value to keep the plugin lightweight
+brtp-allowed-retries: 20

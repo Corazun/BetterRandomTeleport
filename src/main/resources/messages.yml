@@ -1,0 +1,60 @@
+#
+# Use "&" placeholder for vanilla colors
+# BetterRandomTeleport messages config file
+
+messages:
+
+  self:
+    # Available placeholder(s) :  %coordX%, %coordY%, %coordZ%
+    # Send a message after the player were randomly teleported
+    successful: "&aYou were successfully randomly teleported to &2X : %coordX%&a, &2Y : %coordY%&a, &2Z : %coordZ%."
+
+    # Available placeholder(s) : %hours%, %minutes%, %seconds%
+    # Send a message if the player is still in cooldown while trying to rtp
+    on-cooldown: "&cThe ability is on cooldown for &4%hours% &chour(s), &4%minutes% &cminute(s), &4%seconds% &cseconde(s)."
+
+    # Available placeholder(s) : %player%, %world%
+    # Send a message when the player try to rtp in a permission restricted world
+    need-world-permission: "&cYou do not have the permission to random teleport in &4%world%"
+
+    # Available placeholder(s) : %player%, %world%
+    # Send a message when the plugin doesn't found any available location (mainly caused by void) to teleport the player
+    not-safe: "&cNot any safe location was found to teleport you in %world% mainly caused by void."
+
+  other:
+    # Available placeholder(s) : %player%
+    # Unknown given player on /brtp teleport <player>
+    unknown-player: "&cThe player %player% wasn't found or isn't online."
+
+    # Available placeholder(s) : %player%
+    # Unknown given player on /brtp teleport <player>
+    clear-cooldown: "&aSuccessfully cleared the remaining &2%player%'s &acooldown"
+
+    # Available placeholder(s) : %player%, %coordX%, %coordY%, %coordZ%
+    # Send a message to the caller when the specified player has been teleported
+    successful: "&aYou successfully randomly teleported &2%player% &ato &2X : %coordX%&a, &2Y : %coordY%&a, &2Z : %coordZ%."
+
+    # Available placeholder(s) : %hours%, %minutes%, %seconds%
+    # Send a message if the caller tries to rtp a player still on cooldown
+    on-cooldown: "&cTeleportation failed because &4%player% &cis still on cooldown for &4%hours% &chour(s), &4%minutes% &cminute(s), &4%seconds% &cseconde(s)."
+
+    # Available placeholder(s) : %player%, %world%
+    # Send a message if the caller tries to rtp a player in a permission restricted world
+    need-world-permission: "&4%player% &cis not allowed to randomly teleport in &4%world%"
+
+    # Available placeholder(s) : %player%, %world%
+    # Send a message when the plugin doesn't found any available location (mainly caused by void) to teleport the player
+    not-safe: "&cNot any safe location was found to teleport &4%player% &cin &4%world% &cmainly caused by void."
+
+
+  # Available placeholder(s) : %world%
+  # Send a message if the caller tries to rtp in a disabled world
+  disabled-world: "&cRandom teleport isn't supported in &4%world%"
+
+  # Available placeholder(s) :  %files%
+  reloading: "&eReloading %files% BetterRandomTeleport configurations..."
+  # Available placeholder(s) :  %keys%, %files%
+  reloaded: "&eSuccessfully reloaded %keys% keys in %files% BetterRandomTeleport configurations."
+
+  # Plugin informations
+  plugin: "&9BetterRandomTeleport plugin v%version% created by %author%."

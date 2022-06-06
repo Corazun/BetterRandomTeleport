@@ -1,0 +1,30 @@
+name: BetterRandomTeleport
+version: 2.0.0
+api-version: 1.13
+author: Corazun
+description: BetterRandomTeleport, try /rtp or /randomteleport
+main: fr.corazun.brtp.Main
+commands:
+  randomteleport:
+    description: Randomly teleport the player through the map
+    permission: brtp.use
+    aliases: [rtp]
+  brtp:
+    description: BetterRandomTeleport administration commands
+    aliases: [betterrandomteleport]
+permissions:
+  brtp.bypass:
+    description: Give the ability to bypass the rtp cooldown
+    default: false
+  brtp.everywhere:
+    description: Give the ability to bypass the random teleport restriction on disabled world(s)
+    default: op
+  brtp.cooldown.default:
+    description: Default permission for rtp cooldown
+    default: true
+  brtp.command.reload:
+    description: Reload all the YAML configurations
+    default: op
+  brtp.command.teleport:
+    description: Randomly teleport another player in his current world
+    default: op
