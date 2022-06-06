@@ -29,7 +29,7 @@ public class Main extends JavaPlugin {
 
         BetterRandomTeleportCommandManager
                 .initialize()
-                .setBypassAllPermissions("brtp.bypass")
+                .setBypassAllPermissions(getLocal("PERMISSION_BYPASS"))
                 .add("reload", new SubCommandReload(), "brtp.command.reload")
                 .add("teleport", new SubCommandTeleport(), "brtp.command.teleport")
                 .add("clear", new SubCommandClear(), "brtp.command.clear");
